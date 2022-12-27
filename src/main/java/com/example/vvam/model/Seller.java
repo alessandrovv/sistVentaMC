@@ -73,7 +73,7 @@ public class Seller {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
+    } 
 
     @OneToMany(mappedBy = "seller")
     private Collection<Sale> sales;
@@ -89,6 +89,7 @@ public class Seller {
     public Seller() {
     }
 
+    
     public Seller(String dni, String firstName, String lastName, String email) {
         this.dni = dni;
         this.firstName = firstName;
