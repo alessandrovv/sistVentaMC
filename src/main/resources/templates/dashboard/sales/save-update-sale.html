@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="index">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Venta</title>
+</head>
+<body>
+<div layout:fragment="header">Registrar Venta</div>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/sale/save}" th:object="${sale}" method="post">
+                        <div>
+                            <input hidden type="text" name="idSale" th:if="${size}" th:value="${sale.id}">
+                            <input hidden type="text" name="idSale" th:if="${!size}" th:value="${0}">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="dniClient">DNI</label>
+                                    <select name="dniClient" id="dniClient" class="form-control" required>
+                                        <option value="-1" disabled >Seleccionar...</option>
+                                        <option th:each="client:${listClients}" th:value="${client.dni}" th:utext="${client.toString()}" th:selected="${client.dni==sale?.client?.dni}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="dniSeller">DNI</label>
+                                <select name="dniSeller" id="dniSeller" class="form-control" required>
+                                    <option value="-1" disabled >Seleccionar...</option>
+                                    <option th:each="seller:${listSellers}" th:value="${seller.dni}" th:utext="${seller.toString()}" th:selected="${seller.dni==sale?.seller?.dni}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr class="w-100">
+                        <div>
+                            <h2>Productos</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <select name="cboProduct" id="cboProduct" class="form-control" required>
+                                        <option value="-1" disabled >Seleccionar...</option>
+                                        <option th:each="product:${listProducts}" th:value="${product.name+'-'+product.price+'-'+product.stock+ '-' + product.id}" th:utext="${product.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 d-flex justify-content-center">
+                                <a class="btn btn-secondary my-auto" onclick="addProduct(event)">Agregar</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <a th:href="@{/sale}" class="btn btn-light">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center" scope="col">Producto</th>
+                                        <th class="text-center" scope="col">Cantidad</th>
+                                        <th class="text-center" scope="col">Precio</th>
+                                        <th class="text-center" scope="col">Subtotal</th>
+                                        <th class="text-center" scope="col">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tableBody">
+                                    <tr th:id="${'row-'+detail?.product?.id}" th:each="detail:${sale?.getItemsNoEliminados()}" class="row-product">
+                                        <td class="d-none">
+                                            <input  hidden readonly th:value="${detail?.id}" name="idDetail[]" type="text">
+                                        </td>
+                                        <td class="d-none">
+                                            <input th:id="${'elim-'+detail?.product?.id}" hidden readonly th:value="${detail?.eliminado}" name="eliminado[]" type="text">
+                                        </td>
+                                        <td class="form-group">
+                                            <input readonly th:value="${detail?.product?.name}" name="product[]" class="form-control" type="text">
+                                        </td>
+                                        <td class="form-group">
+                                            <input min="0" th:max="${detail?.product?.stock}" th:value="${detail?.quantity}" name="quantity[]" onchange="updateSubtotal(event)" class="form-control" type="number">
+                                        </td>
+                                        <td class="text-center txtPrice" th:text="${detail?.product?.price}"></td>
+                                        <td class="text-center txtSubtotal" th:id="${'sub-'+detail?.product?.id}" th:text="${detail?.quantity*detail?.product?.price}"></td>
+                                        <td class="text-center">
+                                            <a th:onclick="|deleteProduct(event, ${detail?.product?.id})|" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-center" colspan="4">Total</td>
+                                            <td id="totalSale">
+                                                <span th:if="${size}" th:text="${sale?.getTotal()}"></span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        let tableBody = document.getElementById("tableBody");
+        let arrayProducts = [];
+
+        let totalSale = document.getElementById("totalSale");
+        let cboProduct = document.getElementById("cboProduct");
+
+        function addProduct(e){
+            let product = cboProduct.value.split("-");
+            let name = product[0];
+            let price = product[1];
+            let stock = product[2];
+            let id = product[3];
+            let temp = `
+                    <td class="d-none">
+                        <input hidden value="0" name="idDetail[]" type="text">
+                    </td>
+                    <td class="d-none">
+                        <input id="elim-${id}" hidden value="false" name="eliminado[]" type="text">
+                    </td>
+                    <td class="form-group">
+                        <input readonly value="${name}" name="product[]" class="form-control txtProduct" type="text">
+                    </td>
+                    <td class="form-group">
+                        <input min="0" max="${stock}" value="1" name="quantity[]" onchange="updateSubtotal(event)" class="form-control numQuantity" type="number">
+                    </td>
+                    <td class="text-center txtPrice">${price}</td>
+                    <td class="text-center txtSubtotal" id="sub-${id}">0</td>
+                    <td class="text-center">
+                        <a onclick="deleteProduct(event,${id})" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                    </td>`;
+
+
+            //let aux = document.querySelectorAll('.row-product');
+            //for(let e of aux){
+            //    console.log(e.getAttribute("id"));
+            //}
+            //console.log(document.querySelectorAll('.row-product'));
+            if(arrayProducts.includes(id)){
+                alert("No se puede ingresar mismo un producto dos veces.");
+            }else{
+                arrayProducts.push(id);
+                const tem_row = document.createElement("tr");
+                tem_row.setAttribute("id", `row-${id}`);
+                tem_row.innerHTML = temp;
+                tableBody.appendChild(tem_row);
+            }
+
+        }
+
+        function updateSubtotal(e){
+            let row =  e.target.parentElement.parentElement;
+            const subtotal = row.querySelector(".txtSubtotal");
+            const price = parseFloat(row.querySelector(".txtPrice").innerText);
+            const quantity = e.target.value;
+            subtotal.innerText = (quantity*price).toString();
+            updateTotal();
+        }
+
+        function updateTotal(){
+            let totals = document.querySelectorAll(".txtSubtotal");
+            let sum = 0;
+            for(let item of totals){
+                sum+=parseFloat(item.innerText);
+            }
+            totalSale.innerText = sum.toString();
+
+        }
+
+        function deleteProduct(e, id){
+            itemElim = document.getElementById(`elim-${id}`);
+            rowElim = document.getElementById(`row-${id}`);
+            rowSubtotal = document.getElementById(`sub-${id}`);
+            rowSubtotal.classList.remove("txtSubtotal");
+            itemElim.value = true;
+            rowElim.classList.add('d-none');
+            itemElim.removeAttribute("id");
+            rowElim.removeAttribute("id");
+            rowSubtotal.removeAttribute("id");
+            let index = arrayProducts.indexOf(id);
+            arrayProducts.splice(index,1);
+            updateTotal();
+        }
+
+        function updateArrayProducts(){
+            console.log(document.querySelectorAll('.row-product'));
+        }
+
+        document.addEventListener("DOMContentLoaded", function (){
+            let aux = document.querySelectorAll('.row-product');
+            for(let e of aux){
+                let product = e.getAttribute("id").split('-')[1];
+                arrayProducts.push(product);
+                //console.log(e.getAttribute("id"));
+            }
+
+            console.log(arrayProducts);
+        });
+    </script>
+</th:block>
+</body>
+</html>
