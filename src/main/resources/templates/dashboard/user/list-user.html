@@ -2,48 +2,48 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      layout:decorate="index">
+        layout:decorate="index">
 <head>
     <meta charset="UTF-8">
-    <title>Clientes</title>
+    <title>Usuarios</title>
 </head>
 <body>
-<div layout:fragment="header">Clientes</div>
-<div layout:fragment="buttons">
-    <a th:href="@{/user/add}" class="btn btn-md btn-primary">Agregar</a>
-</div>
-<div layout:fragment="content">
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th class="text-center" scope="col">DNI</th>
-                    <th class="text-center" scope="col">Nombres</th>
-                    <th class="text-center" scope="col">Correo</th>
-                    <th class="text-center" scope="col">Activo</th>
-                    <th class="text-center" scope="col">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="client:${listClients}">
-                    <th class="text-center" th:text="${client.dni}" scope="row"></th>
-                    <td class="text-center" th:text="${client.toString()}"></td>
-                    <td class="text-center" th:text="${client.email}"></td>
-                    <td class="text-center" th:text="${client.verActive(client.active)}"></td>
-                    <td class="text-center">
-                        <div class="d-flex justify-content-around">
-                            <a th:href="@{/client/edit/{id}(id=${client.id})}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                            <a th:href="@{/client/delete/{id}(id=${client.id})}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-                        </div>
+    <div layout:fragment="header">Usuarios</div>
+    <div layout:fragment="buttons">
+        <a th:href="@{/user/add}" class="btn btn-md btn-primary">Agregar</a>
+    </div>
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="text-center" scope="col">Nombres</th>
+                        <th class="text-center" scope="col">Apellidos</th>
+                        <th class="text-center" scope="col">Email</th>
+                        <th class="text-center" scope="col">Activo</th>
+                        <th class="text-center" scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user:${listUsers}">
+                        <th class="text-center" th:text="${user.nombre}" scope="row"></th>
+                        <td class="text-center" th:text="${user.apellidos}"></td>
+                        <td class="text-center" th:text="${user.email}"></td>
+                        <td class="text-center" th:text="${user.verActive(user.active)}"></td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-around">
+                             <a th:href="@{/user/edit/{id}(id=${user.id})}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                             <a th:href="@{/user/delete/{id}(id=${user.id})}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                            </div>
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
