@@ -38,7 +38,7 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception{
-        http.authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(
                         "/register**",
                         "/dist/**",
@@ -58,7 +58,8 @@ public class CustomWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
-                .permitAll();
+                .permitAll()
+                ;
     }
     public void configure(WebSecurity web) throws Exception {
         // web.ignoring().antMatchers("/resources/static/**").anyRequest();
