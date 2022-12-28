@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface IProductService {
     Product save(ProductRegistrarionDto productRegistrarionDto);
+    Product save(Long id, ProductRegistrarionDto productregistrationDto);
+    Product delete(Long id, ProductRegistrarionDto productregistrationDto);
     Product findByName(String name);
     List<Product> listAll();
 }

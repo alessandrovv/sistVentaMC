@@ -74,6 +74,17 @@ public class Product {
         this.active = active;
     }
 
+    @Column(name = "eliminado")
+    private boolean eliminado;
+
+    public boolean isEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+    
     public String verActive(boolean active){
         return active==true?"Sí":"No";
     }
@@ -81,21 +92,31 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, double price, int stock, boolean active) {
+    public Product(Long id, String name, String description, double price, int stock, boolean active, boolean eliminado) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.active = active;
+        this.eliminado = eliminado;
     }
-
+    
+    public Product(Long id, String name, String description, double price, int stock) {
+    	this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+    
     public Product(String name, String description, double price, int stock) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.active = true;
+        this.eliminado=false;
     }
 
 

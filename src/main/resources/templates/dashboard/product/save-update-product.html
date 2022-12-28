@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="index">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Producto</title>
+</head>
+<body>
+<div layout:fragment="header">Registrar Producto</div>
+<div layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-body">
+                    <form th:action="@{/product/save}" th:object="${product}" method="post">
+                        <div>
+                            <input hidden type="text" name="idProduct" th:if="${size}" th:value="${product.id}">
+                            <input hidden type="text" name="idProduct" th:if="${!size}" th:value="${0}">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" name="name" class="form-control" id="name" th:value="${product?.name}"  required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripcion</label>
+                            <input type="text" class="form-control" name="description" id="description" th:value="${product?.description}" required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Precio</label>
+                            <input type="number" class="form-control" name="price" id="price" th:value="${product?.price}" min="1" step="any" required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock</label>
+                            <input type="number" class="form-control" name="stock" id="stock" th:value="${product?.stock}" min="1" required>
+
+                        </div>
+                        <a th:href="@{/product}" class="btn btn-light">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Registrar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
