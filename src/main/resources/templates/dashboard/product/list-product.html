@@ -9,6 +9,9 @@
 </head>
 <body>
 <div layout:fragment="header">Productos</div>
+<div layout:fragment="buttons">
+        <a th:href="@{/product/add}" class="btn btn-md btn-primary">Agregar</a>
+    </div>
 <div layout:fragment="content">
     <div class="row">
         <div class="col-12">
@@ -20,6 +23,7 @@
                     <th class="text-center" scope="col">Precio</th>
                     <th class="text-center" scope="col">Stock</th>
                     <th class="text-center" scope="col">Activo</th>
+                    <th class="text-center" scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +33,13 @@
                     <td class="text-center" th:text="${product.price}"></td>
                     <td class="text-center" th:text="${product.stock}"></td>
                     <td class="text-center" th:text="${product.verActive(product.active)}"></td>
+                    <td class="text-center">
+                            <div class="d-flex justify-content-around">
+                                <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                                <a th:href="@{/product/delete/{id}(id=${product.id})}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                            </div>
+
+                    </td>
                 </tr>
 
                 </tbody>
