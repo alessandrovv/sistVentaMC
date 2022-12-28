@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="index">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos</title>
+</head>
+<body>
+<div layout:fragment="header">Productos</div>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col">Nombre</th>
+                    <th class="text-center" scope="col">Descripcion</th>
+                    <th class="text-center" scope="col">Precio</th>
+                    <th class="text-center" scope="col">Stock</th>
+                    <th class="text-center" scope="col">Activo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product:${listProducts}">
+                    <th class="text-center" th:text="${product.name}" scope="row"></th>
+                    <td class="text-center" th:text="${product.description}"></td>
+                    <td class="text-center" th:text="${product.price}"></td>
+                    <td class="text-center" th:text="${product.stock}"></td>
+                    <td class="text-center" th:text="${product.verActive(product.active)}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

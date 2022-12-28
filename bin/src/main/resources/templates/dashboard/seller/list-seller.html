@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="index">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendedores</title>
+</head>
+<body>
+<div layout:fragment="header">Vendedores</div>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="text-center" scope="col">DNI</th>
+                    <th class="text-center" scope="col">Nombres</th>
+                    <th class="text-center" scope="col">Correo</th>
+                    <th class="text-center" scope="col">Activo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="seller:${listSellers}">
+                    <th class="text-center" th:text="${seller.dni}" scope="row"></th>
+                    <td class="text-center" th:text="${seller.toString()}"></td>
+                    <td class="text-center" th:text="${seller.email}"></td>
+                    <td class="text-center" th:text="${seller.verActive(seller.active)}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
