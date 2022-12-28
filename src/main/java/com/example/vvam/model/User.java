@@ -74,6 +74,17 @@ public class User {
         this.active = active;
     }
 
+    @Column(name = "eliminado")
+    private boolean eliminado;
+
+    public boolean isEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+
     @ManyToMany(fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
                 inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "role_id"))
@@ -103,7 +114,33 @@ public class User {
         this.email = email;
         this.password = password;
         this.active = true;
+        this.eliminado = false;
         this.roles = roles;
+    }
+
+    public User(Long id, String nombre, String apellidos, String email, String password, boolean active, boolean eliminado){
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.password = password;
+        this.active = active;
+        this.eliminado = eliminado;
+    }
+
+    public User(Long id, String nombre, String apellidos, String email, String password){
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(Long id, String nombre, String apellidos, String email){
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
     }
 
     public User() {

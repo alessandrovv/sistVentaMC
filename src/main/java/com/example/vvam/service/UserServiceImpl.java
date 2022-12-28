@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,11 +60,39 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public User saveUser(Long id,UserRegistrationDto registrationDto){
+        User user = new User(
+                id,
+                registrationDto.getFirstName()
+                ,registrationDto.getLastName()
+                ,registrationDto.getUserName()
+                ,passwordEncoder.encode(registrationDto.getPassword())
+        );
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User delete(Long id,UserRegistrationDto registrationDto){
+        User user = new User(
+                id,
+                registrationDto.getFirstName(),
+                registrationDto.getLastName(),
+                registrationDto.getUserName()
+                ,passwordEncoder.encode(registrationDto.getPassword())
+                ,false
+                ,true
+
+        );
+        return userRepository.save(user);
+    }
+
+    @Override
     public User findByUsername(String username){
         return userRepository.findByEmail(username);
     }
 
-
+    public List<User> listAll(){return userRepository.findAllByEliminadoIsFalse();}
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
         User user = userRepository.findByEmail(username);
@@ -77,4 +106,6 @@ public class UserServiceImpl implements IUserService {
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
+
+    public Optional<User> getById(Long id){return userRepository.findById(id);}
 }
