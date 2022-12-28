@@ -106,8 +106,25 @@ public class User {
         this.roles = roles;
     }
 
-    public User() {
+    public User(Long id,String nombre, String apellidos, String email, String password, Collection<Role> roles) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.password = password;
+        this.active = true;
+        this.roles = roles;
     }
+    public User(Long id,String nombre, String apellidos, String email, String password,Collection<Role> roles, boolean active) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.active = active;
+    }
+    public User(){}
 
     @Override
     public String toString() {
@@ -120,5 +137,13 @@ public class User {
                 ", active=" + active +
                 ", roles=" + roles +
                 '}';
+    }
+    public String toJSON(){
+        return
+                String.format("User{id='{0}',nombre='{1}',apellidos='{2}',email='{3}',active='{0}'}", this.id, this.nombre, this.apellidos, this.email, this.active);
+    }
+
+    public String verActive(boolean active){
+        return active==true?"Sí":"No";
     }
 }
