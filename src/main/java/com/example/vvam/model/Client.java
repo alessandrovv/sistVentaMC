@@ -1,5 +1,7 @@
 package com.example.vvam.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -88,6 +90,7 @@ public class Client {
     }
 
     @OneToMany(mappedBy = "client")
+    @JsonIgnore
     private Collection<Sale> purchases;
 
     public Collection<Sale> getPurchases() {
@@ -156,6 +159,6 @@ public class Client {
 
     @Override
     public String toString() {
-        return this.firstName +" "+this.lastName;
+        return this.dni + " - " + this.firstName +" "+this.lastName;
     }
 }

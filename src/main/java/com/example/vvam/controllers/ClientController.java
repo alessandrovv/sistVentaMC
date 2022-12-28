@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @Controller
+
 @RequestMapping("/client")
 public class ClientController {
 
@@ -57,26 +58,14 @@ public class ClientController {
         return "redirect:/client/";
     }
 
-    @PostMapping("/saveAjax")
-    public String saveAjax(@RequestParam(value = "idClient") Long id, @RequestParam(value = "dni") String dni, @RequestParam(value = "firstName") String firstName,
-                       @RequestParam(value = "lastName") String lastName, @RequestParam(value = "email") String email, RedirectAttributes redirect) throws ParseException {
-        Client client = null;
-        if(id==null || id==0){
-            client = clientService.save(new ClientRegistrationDto(dni,firstName,lastName,email));
-            redirect.addFlashAttribute("message", "Cliente agregado correctamente.");
-        }else{
-            client = clientService.save(id,new ClientRegistrationDto(dni,firstName,lastName,email));
-            redirect.addFlashAttribute("message", "Cliente" + client.toString() + " actualizado correctamente.");
-        }
-
-        List<Client> clients = clientService.listAll();
-        return "redirect:/client/";
-    }
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id){
         Client client = clientService.getById(id).get();
         clientService.delete(id, new ClientRegistrationDto(client.getDni(),client.getFirstName(),client.getLastName(),client.getEmail()));
         return "redirect:/client/";
     }
+
+
+
+
 }

@@ -21,19 +21,31 @@
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label for="dniClient">DNI</label>
-                                    <select name="dniClient" id="dniClient" class="form-control" required>
-                                        <option value="-1" disabled >Seleccionar...</option>
-                                        <option th:each="client:${listClients}" th:value="${client.dni}" th:utext="${client.toString()}" th:selected="${client.dni==sale?.client?.dni}"></option>
-                                    </select>
+                                <div class="row">
+                                    <div class="col-10 pr-0">
+                                        <div class="form-group">
+                                            <label for="dniClient">Cliente</label>
+                                            <select name="dniClient" id="dniClient" class="form-control" required>
+                                                <option value="-1" disabled >Seleccionar...</option>
+                                                <option th:each="client:${listClients}" th:value="${client.dni}" th:utext="${client.toString()}" th:selected="${client.dni==sale?.client?.dni}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 pl-1 d-flex align-items-center">
+
+                                        <button type="button" class="btn btn-primary mt-3"  data-toggle="modal" data-target="#exampleModal">
+                                            +
+                                        </button>
+
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="col-6">
-                                <label for="dniSeller">DNI</label>
+                                <label for="dniSeller">Vendedor</label>
                                 <select name="dniSeller" id="dniSeller" class="form-control" required>
                                     <option value="-1" disabled >Seleccionar...</option>
-                                    <option th:each="seller:${listSellers}" th:value="${seller.dni}" th:utext="${seller.toString()}" th:selected="${seller.dni==sale?.seller?.dni}"></option>
+                                    <option th:each="seller:${listSellers}" th:value="${seller.dni}" th:utext="${seller.toString() }" th:selected="${seller.dni==sale?.seller?.dni}"></option>
                                 </select>
                             </div>
                         </div>
@@ -108,7 +120,50 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form  id="clientForm">
+                        <div class="form-group">
+                            <label for="dni">DNI</label>
+                            <input type="text" name="dni" class="form-control" id="dni"   required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">NOMBRES</label>
+                            <input type="text" class="form-control" name="first_name" id="firstName"  required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">APELLIDOS</label>
+                            <input type="text" class="form-control" name="last_name" id="lastName"  required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="email">EMAIL</label>
+                            <input type="email" class="form-control" name="email" id="email"  required>
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="addClient()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- Modal -->
+
 <th:block layout:fragment="script">
     <script type="text/javascript">
         let tableBody = document.getElementById("tableBody");
@@ -116,6 +171,62 @@
 
         let totalSale = document.getElementById("totalSale");
         let cboProduct = document.getElementById("cboProduct");
+
+        function addClient(){
+            let url = "[[${@environment.getProperty('api.base.path')}]]/api/client/list";
+            let data = $("#clientForm").serialize();
+            let dni = $("#dni").val();
+            let nombre = $("#firstName").val();
+            let apellidos = $("#lastName").val();
+            let email = $("#email").val();
+            let cboClient = $("#dniClient");
+            console.log(dni);
+            //console.log(url);
+            //console.log(data);
+            //console.log($("#clientForm").valid());
+
+            if($("#clientForm").valid()){
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        dni:dni,
+                        firstName:nombre,
+                        lastName:apellidos,
+                        email:email
+                    },
+                    dataType: "JSON",
+                    url:"/api/client/save",
+                    success: function (data){
+                        console.log(data);
+                        if(data.length>0){
+                            cboClient.empty();
+                            data[1].forEach((el,i)=>{
+                                cboClient.append($("<option>",{
+                                    value:el.dni,
+                                    text:`${el.firstName} ${el.lastName}`
+                                }));
+                            });
+                            $("#exampleModal").modal('hide');
+                            $("#clientForm")[0].reset();
+                            $(`#dniClient option[value = ${data[0]}]`).attr('selected',true);
+                        }else{
+                            $("#exampleModal").modal('hide');
+                            $("#clientForm")[0].reset();
+                            alert('El cliente ya existe.')
+                        }
+
+
+                        //console.log(JSON.parse(data[0]));
+                        //console.log(data[0].status);
+                    },
+                    error: function (data){
+                        console.log('error',data);
+                    }
+
+                });
+                console.log(url);
+            }
+        }
 
         function addProduct(e){
             let product = cboProduct.value.split("-");
