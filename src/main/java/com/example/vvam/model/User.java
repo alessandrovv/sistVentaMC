@@ -99,6 +99,18 @@ public class User {
         this.roles = roles;
     }
 
+    @OneToOne
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
     public User(String nombre, String apellidos, String email, String password, Boolean active, Collection<Role> roles) {
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -116,6 +128,16 @@ public class User {
         this.active = true;
         this.eliminado = false;
         this.roles = roles;
+    }
+    public User(String nombre, String apellidos, String email, String password, Collection<Role> roles,Seller seller) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+        this.password = password;
+        this.active = true;
+        this.eliminado = false;
+        this.roles = roles;
+        this.seller = seller;
     }
 
     public User(Long id,String nombre, String apellidos, String email, String password, Collection<Role> roles) {

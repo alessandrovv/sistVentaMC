@@ -50,11 +50,11 @@ public class SetupData implements ApplicationListener<ContextRefreshedEvent> {
             return;
         createRoleIfNotFound("ROLE_USER");
         createRoleIfNotFound("ROLE_ADMIN");
+        Seller seller = createSellerIfNotFound(new SellerRegistrationDto("75268952","Juan","Perez","juan@gmail.com"));
         createUserAdminIfNotFound(new UserRegistrationDto("admin","admin", "admin@gmail.com", "123456"));
-        createUserUserIfNotFound(new UserRegistrationDto("ventas","ventas", "ventas@gmail.com", "123456"));
-        createSellerIfNotFound(new SellerRegistrationDto("75268952","Juan","Perez","juan@gmail.com"));
-        createClientIfNotFound(new ClientRegistrationDto("74985052", "Alessandro","Venegas","alessandro.venegas@gmail.com"));
-        createClientIfNotFound(new ClientRegistrationDto("74985053", "Pedro","Sanchez","pedro.sanchez@gmail.com"));
+        createUserUserIfNotFound(new UserRegistrationDto("ventas","ventas", "ventas@gmail.com", "123456"), seller);
+        createClientIfNotFound(new ClientRegistrationDto("74985052", "Alessandro","alessandro.venegas@gmail.com"));
+        createClientIfNotFound(new ClientRegistrationDto("74985053", "Pedro","pedro.sanchez@gmail.com"));
         createProductIfNotFound(new ProductRegistrarionDto("Producto1","Producto1", 20.5, 20));
         createProductIfNotFound(new ProductRegistrarionDto("Producto2","Producto2", 15.3, 10));
         createProductIfNotFound(new ProductRegistrarionDto("Producto3","Producto3", 7.5, 16));
@@ -81,10 +81,11 @@ public class SetupData implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Transactional
-    User createUserUserIfNotFound(UserRegistrationDto registrationDto) {
+    User createUserUserIfNotFound(UserRegistrationDto registrationDto, Seller seller) {
         User user = userRepository.findByEmail(registrationDto.getUserName());
         if (user == null) {
-            user = userService.saveUser(registrationDto);
+            registrationDto.setSeller(seller);
+            user = userService.saveSeller(registrationDto);
         }
         return user;
     }
@@ -102,7 +103,7 @@ public class SetupData implements ApplicationListener<ContextRefreshedEvent> {
 
     @Transactional
     Client createClientIfNotFound(ClientRegistrationDto registrationDto){
-        Client client = clientRepository.findByDni(registrationDto.getDni());
+        Client client = clientRepository.findByDocumentoIdentidad(registrationDto.getDocumentoIdentidad());
 
         if(client==null){
             client = clientService.save(registrationDto);

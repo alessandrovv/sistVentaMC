@@ -10,7 +10,10 @@ public interface IUserService extends UserDetailsService {
     User saveAdmin(UserRegistrationDto registrationDto);
     User saveUser(UserRegistrationDto registrationDto);
     User saveUser(Long id,UserRegistrationDto registrationDto);
+
+    User saveSeller(UserRegistrationDto registrationDto);
     User delete(Long id,UserRegistrationDto registrationDto);
     User findByUsername(String username);
     List<User> listAll();
+
 }

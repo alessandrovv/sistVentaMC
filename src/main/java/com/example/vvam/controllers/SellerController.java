@@ -2,9 +2,12 @@ package com.example.vvam.controllers;
 
 import com.example.vvam.dto.ClientRegistrationDto;
 import com.example.vvam.dto.SellerRegistrationDto;
+import com.example.vvam.dto.UserRegistrationDto;
 import com.example.vvam.model.Client;
 import com.example.vvam.model.Seller;
+import com.example.vvam.model.User;
 import com.example.vvam.service.SellerServiceImpl;
+import com.example.vvam.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +23,9 @@ public class SellerController {
 	
 	@Autowired
 	private SellerServiceImpl sellerService;
+
+	@Autowired
+	private UserServiceImpl userService;
 
 	@GetMapping("")
 	public String listSellers(Model model) {
@@ -47,10 +53,12 @@ public class SellerController {
 	@PostMapping("/save")
 	public String save(@RequestParam(value = "idSeller") Long id, @RequestParam(value = "dni") String dni,
 			@RequestParam(value = "firstName") String firstName, @RequestParam(value = "lastName") String lastName,
-			@RequestParam(value = "email") String email, RedirectAttributes redirect) throws ParseException {
+			@RequestParam(value = "email") String email,@RequestParam(value="password", required = false) String password, RedirectAttributes redirect) throws ParseException {
 		Seller seller = null;
+		User user = null;
 		if (id == null || id == 0) {
 			seller = sellerService.save(new SellerRegistrationDto(dni, firstName, lastName, email));
+			user = userService.saveSeller(new UserRegistrationDto(firstName,lastName,email,password,seller));
 			redirect.addFlashAttribute("message", "Vendedor agregado correctamente.");
 		} else {
 			seller = sellerService.save(id, new SellerRegistrationDto(dni, firstName, lastName, email));

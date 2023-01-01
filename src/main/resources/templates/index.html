@@ -120,7 +120,7 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
-                    <li class="nav-item" sec:authorize="isAuthenticated() && hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
+                    <li class="nav-item" sec:authorize="isAuthenticated() && hasAnyRole('ROLE_ADMIN')">
                         <a th:href="@{/}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
@@ -128,6 +128,7 @@
                             </p>
                         </a>
                     </li>
+                    <!--
                     <li class="nav-item" sec:authorize="isAuthenticated() && hasAnyRole('ROLE_ADMIN')">
                         <a th:href="@{/user}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -136,6 +137,7 @@
                             </p>
                         </a>
                     </li>
+                    -->
                     <li class="nav-item" sec:authorize="isAuthenticated() && hasAnyRole('ROLE_ADMIN')">
                         <a th:href="@{/seller}" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>

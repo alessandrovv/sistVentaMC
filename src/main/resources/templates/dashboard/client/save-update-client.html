@@ -20,23 +20,18 @@
                             <input hidden type="text" name="idClient" th:if="${!size}" th:value="${0}">
                         </div>
                         <div class="form-group">
-                            <label for="dni">DNI</label>
-                            <input type="text" name="dni" class="form-control" id="dni" th:value="${client?.dni}"  required>
+                            <label for="dni">DOCUMENTO DE IDENTIDAD</label>
+                            <input type="text" name="documentoIdentidad" class="form-control" id="dni" th:value="${client?.documentoIdentidad}"  required>
 
                         </div>
                         <div class="form-group">
-                            <label for="firstName">FIRST NAME</label>
-                            <input type="text" class="form-control" name="firstName" id="firstName" th:value="${client?.firstName}" required>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">LAST NAME</label>
-                            <input type="text" class="form-control" name="lastName" id="lastName" th:value="${client?.lastName}" required>
+                            <label for="firstName">RAZON SOCIAL</label>
+                            <input type="text" class="form-control" name="razonSocial" id="firstName" th:value="${client?.razonSocial}" required>
 
                         </div>
                         <div class="form-group">
                             <label for="email">EMAIL</label>
-                            <input type="email" class="form-control" name="email" id="email" th:value="${client?.email}" required>
+                            <input type="email" class="form-control" name="email" id="email" th:value="${client?.email}" >
 
                         </div>
                         <a th:href="@{/client}" class="btn btn-light">Cancelar</a>

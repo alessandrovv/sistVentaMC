@@ -1,5 +1,7 @@
 package com.example.vvam.dto;
 
+import com.example.vvam.model.Seller;
+
 public class UserRegistrationDto {
     //@NotEmpty(message = "First name can't be empty!")
     private String firstName;
@@ -15,6 +17,8 @@ public class UserRegistrationDto {
     //@NotEmpty(message = "*Please provide your password")
     private String password;
 
+    private Seller seller;
+
     public UserRegistrationDto(){
     }
 
@@ -24,6 +28,14 @@ public class UserRegistrationDto {
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
+    }
+    public UserRegistrationDto(String firstName, String lastName, String userName, String password, Seller seller) {
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+        this.seller = seller;
     }
 
     public String getFirstName() {
@@ -49,5 +61,13 @@ public class UserRegistrationDto {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 }

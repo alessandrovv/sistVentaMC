@@ -23,37 +23,27 @@ public class Client {
         this.id = id;
     }
 
-    @Column(name = "dni")
-    private String dni;
 
-    public String getDni() {
-        return dni;
+    @Column(name = "documentoIdentidad")
+    private String documentoIdentidad;
+
+    public String getDocumentoIdentidad() {
+        return documentoIdentidad;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setDocumentoIdentidad(String documentoIdentidad) {
+        this.documentoIdentidad = documentoIdentidad;
     }
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "razonSocial")
+    private String razonSocial;
 
-    public String getFirstName() {
-        return firstName;
+    public String getRazonSocial() {
+        return razonSocial;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
     }
 
     @Column(name = "email")
@@ -104,22 +94,23 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long id, String dni, String firstName, String lastName, String email, boolean active, boolean eliminado) {
+    public Client(Long id, String documentoIdentidad, String razonSocial, String email, boolean active, boolean eliminado) {
         this.id = id;
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.documentoIdentidad = documentoIdentidad;
+        this.razonSocial = razonSocial;
+
         this.email = email;
         this.active = active;
         this.eliminado = eliminado;
     }
 
-    public Client(Long id, String dni, String firstName, String lastName, String email) {
+    public Client(Long id, String documentoIdentidad, String razonSocial, String email) {
         this.id = id;
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.documentoIdentidad = documentoIdentidad;
+        this.razonSocial = razonSocial;
         this.email = email;
+        this.active=true;
+        this.eliminado = false;
     }
 
     public Client(Long id, boolean active, boolean eliminado) {
@@ -128,20 +119,18 @@ public class Client {
         this.eliminado = eliminado;
     }
 
-    public Client(String dni, String firstName, String lastName, String email) {
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Client(String documentoIdentidad, String razonSocial, String email) {
+        this.documentoIdentidad = documentoIdentidad;
+        this.razonSocial = razonSocial;
         this.email = email;
         this.active = true;
         this.eliminado=false;
     }
 
-    public Client(Long id, String dni, String firstName, String lastName, String email, boolean active, boolean eliminado,Collection<Sale> purchases) {
+    public Client(Long id, String documentoIdentidad, String razonSocial, String email, boolean active, boolean eliminado,Collection<Sale> purchases) {
         this.id = id;
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.documentoIdentidad = documentoIdentidad;
+        this.razonSocial = razonSocial;
         this.email = email;
         this.active = active;
         this.eliminado = eliminado;
@@ -150,7 +139,7 @@ public class Client {
 
     public String toJSON(){
         return
-                String.format("Client{id='{0}',dni='{1}',firstName='{2}',lastName='{3}',email='{4}',active='{0}'}", this.id, this.dni, this.firstName, this.lastName, this.email, this.active);
+                String.format("Client{id='{0}',documentoIdentidad='{1}',razonSocial='{2}',email='{4}',active='{0}'}", this.id, this.documentoIdentidad, this.razonSocial, this.email, this.active);
     }
 
     public String verActive(boolean active){
@@ -159,6 +148,8 @@ public class Client {
 
     @Override
     public String toString() {
-        return this.dni + " - " + this.firstName +" "+this.lastName;
+        return this.razonSocial;
     }
+
+    public String toString1() {return this.documentoIdentidad + " - " + this.razonSocial;}
 }

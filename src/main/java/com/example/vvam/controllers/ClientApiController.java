@@ -24,16 +24,16 @@ public class ClientApiController {
     private ClientServiceImpl clientService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public List<Object> saveAjax(@RequestParam(value = "dni") String dni, @RequestParam(value = "firstName") String firstName,
-                                 @RequestParam(value = "lastName") String lastName, @RequestParam(value = "email") String email) {
+    public List<Object> saveAjax(@RequestParam(value = "documentoIdentidad") String documentoIdentidad, @RequestParam(value = "razonSocial") String razonSocial,
+                                  @RequestParam(value = "email") String email) {
         System.out.println("hola");
         List<Object> res = new ArrayList<>();
         Client cliente = null;
-        cliente = clientService.findByDni(dni);
+        cliente = clientService.findByDocumentoIdentidad(documentoIdentidad);
         if(cliente==null){
-            cliente = clientService.save(new ClientRegistrationDto(dni, firstName, lastName,email));
+            cliente = clientService.save(new ClientRegistrationDto(documentoIdentidad, razonSocial,email));
             List<Client> clients = clientService.listAll();
-            res.add(dni);
+            res.add(documentoIdentidad);
             res.add(clients);
         }
 

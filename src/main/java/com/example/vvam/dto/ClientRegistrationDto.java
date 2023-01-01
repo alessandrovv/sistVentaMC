@@ -1,33 +1,24 @@
 package com.example.vvam.dto;
 
 public class ClientRegistrationDto {
-    private String dni;
-    private String firstName;
-    private String lastName;
+    private String documentoIdentidad;
+    private String razonSocial;
     private String email;
 
-    public String getDni() {
-        return dni;
+    public String getDocumentoIdentidad() {
+        return documentoIdentidad;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setDocumentoIdentidad(String documentoIdentidad) {
+        this.documentoIdentidad = documentoIdentidad;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getRazonSocial() {
+        return razonSocial;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setRazonSocial(String razonSocial) {
+        this.razonSocial = razonSocial;
     }
 
     public String getEmail() {
@@ -41,10 +32,9 @@ public class ClientRegistrationDto {
     public ClientRegistrationDto() {
     }
 
-    public ClientRegistrationDto(String dni, String firstName, String lastName, String email) {
-        this.dni = dni;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public ClientRegistrationDto(String documentoIdentidad, String razonSocial, String email) {
+        this.documentoIdentidad = documentoIdentidad;
+        this.razonSocial = razonSocial;
         this.email = email;
     }
 }

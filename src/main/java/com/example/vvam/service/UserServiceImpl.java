@@ -48,6 +48,20 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public User saveSeller(UserRegistrationDto registrationDto){
+        User user = new User(
+                registrationDto.getFirstName()
+                , registrationDto.getLastName()
+                , registrationDto.getUserName()
+                , passwordEncoder.encode(registrationDto.getPassword())
+                , List.of(roleRepository.findByName("ROLE_USER"))
+                , registrationDto.getSeller()
+        );
+
+        return userRepository.save(user);
+    }
+
+    @Override
     public User saveUser(UserRegistrationDto registrationDto) {
         User user = new User(
                 registrationDto.getFirstName()
@@ -108,9 +122,7 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    @Override
-    public List<User> listAll(){
-        return userRepository.findAllByActiveIsTrue();}
+
 
     public Optional<User> getById(Long id){
         return userRepository.findById(id);

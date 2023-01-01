@@ -5,16 +5,17 @@ import com.example.vvam.dto.SaleRegistrationDto;
 import com.example.vvam.model.*;
 import com.example.vvam.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.Style;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/sale")
@@ -44,6 +45,15 @@ public class SaleController {
 
     @GetMapping("/add")
     public String addSale(Sale sale, Model model){
+
+        //Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //UserDetails userDetail = (UserDetails) auth;
+        //String email = userDetail.getUsername();
+        //Object[] arr = userDetail.getAuthorities();
+
+        //System.out.println(email);
+        //System.out.println(userDetail.getAuthorities().toString().equals("[ROLE_ADMIN]"));
+
         model.addAttribute("sale", sale);
         List<Client> clients = clientService.listAll();
         List<Seller> sellers = sellerService.listAll();
@@ -74,13 +84,14 @@ public class SaleController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestParam(value = "idSale") Long idSale, @RequestParam(value = "dniClient") String dniClient, @RequestParam(value = "dniSeller") String dniSeller,
+    public String save(@RequestParam(value = "idSale") Long idSale, @RequestParam(value = "docIdentidadClient") String docIdentidadClient, @RequestParam(value = "dniSeller") String dniSeller,
                        @RequestParam(value = "idDetail[]") List<Long> idDetails,@RequestParam(value = "product[]") List<String> products,
                        @RequestParam(value = "quantity[]") List<Integer> quantities, @RequestParam(value = "eliminado[]") List<Boolean> eliminados,
                        RedirectAttributes redirectAttributes) throws ParseException{
+
         Date date = new Date();
         Collection<Sale_Detail> items = new ArrayList<Sale_Detail>();
-        Client client = clientService.findByDni(dniClient);
+        Client client = clientService.findByDocumentoIdentidad(docIdentidadClient);
         Seller seller = sellerService.findByDni(dniSeller);
         Sale sale = null;
         if(idSale==null || idSale==0){

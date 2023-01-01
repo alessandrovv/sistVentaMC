@@ -19,11 +19,10 @@ public class ClientServiceImpl implements IClientService{
     public Client save(ClientRegistrationDto registrationDto){
         Client client = null;
 
-        if(clientRepository.findByDni(registrationDto.getDni())==null){
+        if(clientRepository.findByDocumentoIdentidad(registrationDto.getDocumentoIdentidad())==null){
             client = new Client(
-                    registrationDto.getDni(),
-                    registrationDto.getFirstName(),
-                    registrationDto.getLastName(),
+                    registrationDto.getDocumentoIdentidad(),
+                    registrationDto.getRazonSocial(),
                     registrationDto.getEmail()
             );
         }
@@ -34,9 +33,8 @@ public class ClientServiceImpl implements IClientService{
     public Client save(Long id, ClientRegistrationDto registrationDto){
         Client client = new Client(
                 id,
-                registrationDto.getDni(),
-                registrationDto.getFirstName(),
-                registrationDto.getLastName(),
+                registrationDto.getDocumentoIdentidad(),
+                registrationDto.getRazonSocial(),
                 registrationDto.getEmail());
 
         return clientRepository.save(client);
@@ -46,9 +44,8 @@ public class ClientServiceImpl implements IClientService{
     public Client delete(Long id, ClientRegistrationDto registrationDto){
         Client client = new Client(
                 id,
-                registrationDto.getDni(),
-                registrationDto.getFirstName(),
-                registrationDto.getLastName(),
+                registrationDto.getDocumentoIdentidad(),
+                registrationDto.getRazonSocial(),
                 registrationDto.getEmail(),
                 false,
                 true
@@ -57,8 +54,8 @@ public class ClientServiceImpl implements IClientService{
     }
 
     @Override
-    public Client findByDni(String dni){
-        return clientRepository.findByDni(dni);
+    public Client findByDocumentoIdentidad(String dni){
+        return clientRepository.findByDocumentoIdentidad(dni);
     }
 
     @Override

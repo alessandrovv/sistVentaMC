@@ -17,18 +17,18 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th class="text-center" scope="col">DNI</th>
-							<th class="text-center" scope="col">Nombres</th>
-							<th class="text-center" scope="col">Correo</th>
-							<th class="text-center" scope="col">Activo</th>
+							<th class="text-center" scope="col">DOCUMENTO IDENTIDAD</th>
+							<th class="text-center" scope="col">RAZON SOCIAL</th>
+							<th class="text-center" scope="col">EMAIL</th>
+							<th class="text-center" scope="col">ACTIVO</th>
 							<th class="text-center" scope="col">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="client:${listClients}">
-							<th class="text-center" th:text="${client.dni}" scope="row"></th>
+							<th class="text-center" th:text="${client.documentoIdentidad}" scope="row"></th>
 							<td class="text-center" th:text="${client.toString()}"></td>
-							<td class="text-center" th:text="${client.email}"></td>
+							<td class="text-center" th:text="${client.email==null||client.email==''?'-':client.email}"></td>
 							<td class="text-center"
 								th:text="${client.verActive(client.active)}"></td>
 							<td class="text-center">

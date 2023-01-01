@@ -25,9 +25,9 @@
                                     <div class="col-10 pr-0">
                                         <div class="form-group">
                                             <label for="dniClient">Cliente</label>
-                                            <select name="dniClient" id="dniClient" class="form-control" required>
+                                            <select name="docIdentidadClient" id="dniClient" class="form-control" required>
                                                 <option value="-1" disabled >Seleccionar...</option>
-                                                <option th:each="client:${listClients}" th:value="${client.dni}" th:utext="${client.toString()}" th:selected="${client.dni==sale?.client?.dni}"></option>
+                                                <option th:each="client:${listClients}" th:value="${client.documentoIdentidad}" th:utext="${client.toString1()}" th:selected="${client.documentoIdentidad==sale?.client?.documentoIdentidad}"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                 <div class="form-group">
                                     <select name="cboProduct" id="cboProduct" class="form-control" required>
                                         <option value="-1" disabled >Seleccionar...</option>
-                                        <option th:each="product:${listProducts}" th:value="${product.name+'-'+product.price+'-'+product.stock+ '-' + product.id}" th:utext="${product.name}"></option>
+                                        <option th:each="product:${listProducts}" th:value="${product.name+'-'+product.price+'-'+product.stock+ '-' + product.id}" th:utext="${product.name + ' --- S/ ' + product.price}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -66,10 +66,7 @@
                                 <a class="btn btn-secondary my-auto" onclick="addProduct(event)">Agregar</a>
                             </div>
                         </div>
-                        <div class="row">
-                            <a th:href="@{/sale}" class="btn btn-light">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Registrar</button>
-                        </div>
+
                         <div class="row">
                             <div class="col-12">
                                 <table class="table table-hover">
@@ -105,8 +102,8 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td class="text-center" colspan="4">Total</td>
-                                            <td id="totalSale">
+                                            <td class="text-lg-right text-bold" colspan="3">Total</td>
+                                            <td id="totalSale" class="text-lg-center text-bold">
                                                 <span th:if="${size}" th:text="${sale?.getTotal()}"></span>
                                             </td>
                                         </tr>
@@ -114,7 +111,10 @@
                                 </table>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <a th:href="@{/sale}" class="btn btn-light mr-3">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -132,23 +132,18 @@
                 <div class="modal-body">
                     <form  id="clientForm">
                         <div class="form-group">
-                            <label for="dni">DNI</label>
-                            <input type="text" name="dni" class="form-control" id="dni"   required>
+                            <label for="docIdentidad">DOCUMENTO DE IDENTIDAD</label>
+                            <input type="text" name="documentoIdentidad" class="form-control" id="docIdentidad"   required>
 
                         </div>
                         <div class="form-group">
-                            <label for="firstName">NOMBRES</label>
-                            <input type="text" class="form-control" name="first_name" id="firstName"  required>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">APELLIDOS</label>
-                            <input type="text" class="form-control" name="last_name" id="lastName"  required>
+                            <label for="razonSocial">RAZON SOCIAL</label>
+                            <input type="text" class="form-control" name="razonSocial" id="razonSocial"  required>
 
                         </div>
                         <div class="form-group">
                             <label for="email">EMAIL</label>
-                            <input type="email" class="form-control" name="email" id="email"  required>
+                            <input type="email" class="form-control" name="email" id="email"  >
 
                         </div>
 
@@ -175,9 +170,9 @@
         function addClient(){
             let url = "[[${@environment.getProperty('api.base.path')}]]/api/client/list";
             let data = $("#clientForm").serialize();
-            let dni = $("#dni").val();
-            let nombre = $("#firstName").val();
-            let apellidos = $("#lastName").val();
+            let dni = $("#docIdentidad").val();
+            let nombre = $("#razonSocial").val();
+            //let apellidos = $("#lastName").val();
             let email = $("#email").val();
             let cboClient = $("#dniClient");
             console.log(dni);
@@ -189,9 +184,9 @@
                 $.ajax({
                     type:'POST',
                     data:{
-                        dni:dni,
-                        firstName:nombre,
-                        lastName:apellidos,
+                        documentoIdentidad:dni,
+                        razonSocial:nombre,
+                        //lastName:apellidos,
                         email:email
                     },
                     dataType: "JSON",
@@ -202,8 +197,8 @@
                             cboClient.empty();
                             data[1].forEach((el,i)=>{
                                 cboClient.append($("<option>",{
-                                    value:el.dni,
-                                    text:`${el.firstName} ${el.lastName}`
+                                    value:el.documentoIdentidad,
+                                    text:`${el.razonSocial}`
                                 }));
                             });
                             $("#exampleModal").modal('hide');

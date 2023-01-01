@@ -25,18 +25,23 @@
 
                         </div>
                         <div class="form-group">
-                            <label for="firstName">FIRST NAME</label>
+                            <label for="firstName">NOMBRES</label>
                             <input type="text" class="form-control" name="firstName" id="firstName" th:value="${seller?.firstName}" required>
 
                         </div>
                         <div class="form-group">
-                            <label for="lastName">LAST NAME</label>
+                            <label for="lastName">APELLIDOS</label>
                             <input type="text" class="form-control" name="lastName" id="lastName" th:value="${seller?.lastName}" required>
 
                         </div>
                         <div class="form-group">
                             <label for="email">EMAIL</label>
                             <input type="email" class="form-control" name="email" id="email" th:value="${seller?.email}" required>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="password">CONTRASEÑA</label>
+                            <input type="password" class="form-control" name="password" id="password" th:value="${size==true?'123456':''}" th:required="${!size}" th:disabled="${size}">
 
                         </div>
                         <a th:href="@{/seller}" class="btn btn-light">Cancelar</a>

@@ -11,7 +11,7 @@ public interface IClientService {
 
     Client delete(Long id, ClientRegistrationDto registrationDto);
 
-    Client findByDni(String dni);
+    Client findByDocumentoIdentidad(String dni);
 
     List<Client> listAll();
 }
