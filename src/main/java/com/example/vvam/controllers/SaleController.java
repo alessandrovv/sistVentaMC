@@ -85,7 +85,7 @@ public class SaleController {
 
     @PostMapping("/save")
     public String save(@RequestParam(value = "idSale") Long idSale, @RequestParam(value = "docIdentidadClient") String docIdentidadClient, @RequestParam(value = "dniSeller") String dniSeller,
-                       @RequestParam(value = "idDetail[]") List<Long> idDetails,@RequestParam(value = "product[]") List<String> products,
+                       @RequestParam(value = "idDetail[]") List<Long> idDetails,@RequestParam(value = "product[]") List<Integer> products, @RequestParam(value = "price[]") List<Float> precios,
                        @RequestParam(value = "quantity[]") List<Integer> quantities, @RequestParam(value = "eliminado[]") List<Boolean> eliminados,
                        RedirectAttributes redirectAttributes) throws ParseException{
 
@@ -102,15 +102,16 @@ public class SaleController {
         System.out.println(eliminados);
         for (int i=0;i<=products.size()-1; i++){
             Sale_Detail sale_detail = null;
-            Product p = productService.findByName(products.get(i));
+            int p = products.get(i);
             int q = quantities.get(i);
+            float precio = precios.get(i);
             boolean e = eliminados.get(i);
             Long id = idDetails.get(i);
             if(!(id==0 && e==true)){
                 if(id==0){
-                    sale_detail = sale_detailService.save(new SaleDetailRegistrationDto(sale,p,q,e));
+                    sale_detail = sale_detailService.save(new SaleDetailRegistrationDto(sale,p,precio,q,e));
                 }else {
-                    sale_detail = sale_detailService.save(id,new SaleDetailRegistrationDto(sale,p,q,e));
+                    sale_detail = sale_detailService.save(id,new SaleDetailRegistrationDto(sale,p,precio,q,e));
                 }
 
                 items.add(sale_detail);

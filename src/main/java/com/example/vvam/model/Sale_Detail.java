@@ -31,16 +31,27 @@ public class Sale_Detail {
         this.sale = sale;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @Column(name = "producto")
+    private int product;
 
-    public Product getProduct() {
+    public int getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(int product) {
         this.product = product;
+    }
+
+
+    @Column(name = "precio")
+    private float price;
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     @Column(name = "quantity")
@@ -68,35 +79,38 @@ public class Sale_Detail {
     public Sale_Detail() {
     }
 
-    public Sale_Detail(Product product, int quantity) {
+    public Sale_Detail(int product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
 
-    public Sale_Detail(Sale sale, Product product, int quantity) {
+    public Sale_Detail(Sale sale, int product, float price , int quantity) {
         this.sale = sale;
         this.product = product;
-        this.quantity = quantity;
-        this.eliminado = false;
-    }
-
-    public Sale_Detail(Long id, Sale sale, Product product, int quantity ) {
-        this.id = id;
-        this.sale = sale;
-        this.product = product;
+        this.price = price;
         this.quantity = quantity;
         this.eliminado = false;
     }
 
-    public Sale_Detail(Long id, Sale sale, Product product, int quantity, boolean eliminado) {
+    public Sale_Detail(Long id, Sale sale, int product, float price, int quantity ) {
         this.id = id;
         this.sale = sale;
         this.product = product;
+        this.price = price;
+        this.quantity = quantity;
+        this.eliminado = false;
+    }
+
+    public Sale_Detail(Long id, Sale sale, int product, float price, int quantity, boolean eliminado) {
+        this.id = id;
+        this.sale = sale;
+        this.product = product;
+        this.price = price;
         this.quantity = quantity;
         this.eliminado = eliminado;
     }
 
     public double getSubTotal(){
-        return this.quantity*this.product.getPrice();
+        return this.quantity*this.price;
     }
 }

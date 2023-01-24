@@ -6,6 +6,212 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Venta</title>
+    <script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+    <script >
+        let idProducto = 0;
+        let nombre;
+        let descripcion;
+        let precio;
+        let stock;
+        let activo;
+
+        function resetId(){
+            idProducto = 0;
+        }
+
+        function listarProductos(){
+            $.ajax({
+                url: 'http://localhost:8091/api/productos',
+                type: 'get',
+                dataType: 'JSON',
+                success: function(response){
+                    console.log(response)
+                    let len = response.length;
+                    let opt_str = '';
+                    $("#cboProduct").empty();
+                    for(let i=0; i<len; i++){
+                        let idProducto =response[i].id;
+                        var nombres = response[i].nombre;
+                        var descripcion = response[i].descripcion;
+                        var precio = response[i].precio;
+                        var stock = response[i].stock;
+                        var activo = response[i].active;
+
+                        opt_str += `
+                                <option value="${nombres}-${precio}-${stock}-${idProducto}" data-precio="${precio}">${nombres} -- S/${precio}</option>
+                                </td>
+                            </tr>`;
+
+
+                    }
+                    $("#cboProduct").append(opt_str);
+
+                }
+            });
+        }
+
+        function cancelar(){
+            $('#nombre').val('');
+            $('#descripcion').val('');
+            $('#precio').val('');
+            $('#stock').val('');
+            $('#activo').attr('checked', false);
+        }
+        function getProducto(id){
+
+            $.ajax({
+                url:`http://localhost:8091/api/productos/${id}`,
+                type:'GET',
+                dataType: 'JSON',
+                success(response){
+                    console.log(response);
+                    idProducto = response.id;
+                    $('#nombre').val(response.nombre);
+                    $('#descripcion').val(response.descripcion);
+                    $('#precio').val(response.precio);
+                    $('#stock').val(response.stock);
+                    $('#activo').attr('checked', response.active);
+
+                    $("#exampleModal").modal('show');
+                },
+                error(response){
+                    console.log(response);
+                }
+            });
+        }
+
+        function deleteProducto(id){
+            console.log(id);
+            $.ajax({
+                url:`http://localhost:8091/api/productos/${id}`,
+                type:'DELETE',
+                dataType: 'JSON',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                success(response){
+                    console.log(response);
+
+                    $('#liveToast').removeClass('hide');
+                    $('#liveToast').addClass('show');
+                    setTimeout(function (){
+                        $('#liveToast').removeClass('show');
+                        $('#liveToast').addClass('hide');
+                        listarProductos();
+                    },2000);
+                },
+                error(response){
+                    console.log(response);
+                    $('#liveToast').removeClass('hide');
+                    $('#liveToast').addClass('show');
+                    setTimeout(function (){
+                        $('#liveToast').removeClass('show');
+                        $('#liveToast').addClass('hide');
+
+                    },2000);
+                    listarProductos();
+                }
+            });
+        }
+
+        function saveProducto(){
+            nombre = $('#nombre').val();
+            descripcion = $('#descripcion').val();
+            precio = $('#precio').val();
+            stock = $('#stock').val();
+            activo = $('#activo').is(':checked')?true:false;
+            console.log(idProducto);
+            console.log(activo);
+
+            if($("#productForm").valid()){
+                if(idProducto==0){
+                    let datos = {
+                        nombre:nombre,
+                        descripcion:descripcion,
+                        precio:precio,
+                        stock:stock,
+                        active:activo,
+                        eliminado:0
+                    };
+                    $.ajax({
+                        url:'http://localhost:8091/api/productos/save',
+                        type:'POST',
+                        dataType: 'JSON',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        data:JSON.stringify(datos),
+                        success(response){
+                            console.log(response);
+                            $("#exampleModal").modal('hide');
+                            listarProductos();
+                            cancelar();
+                        },
+                        error(response){
+                            console.log(response);
+                            $("#exampleModal").modal('hide');
+                            listarProductos();
+                            cancelar();
+                        }
+                    });
+                }else{
+                    let datos = {
+                        id:idProducto,
+                        nombre:nombre,
+                        descripcion:descripcion,
+                        precio:precio,
+                        stock:stock,
+                        active:activo,
+                        eliminado:0
+                    };
+                    $.ajax({
+                        url:'http://localhost:8091/api/productos/edit',
+                        type:'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        dataType: 'JSON',
+                        data:JSON.stringify(datos),
+                        success(response){
+                            console.log(response);
+                            $("#exampleModal").modal('hide');
+                            listarProductos();
+                            cancelar();
+                        },
+                        error(response){
+                            console.log(response);
+                            $("#exampleModal").modal('hide');
+                            listarProductos();
+                            cancelar();
+                        }
+                    });
+                }
+
+            }else{
+                alert('Llenar correctamente el formulario.');
+            }
+
+        }
+
+        function activeToast(){
+            $('#liveToast').removeClass('hide');
+            $('#liveToast').addClass('show');
+            setTimeout(function (){
+                $('#liveToast').removeClass('show');
+                $('#liveToast').addClass('hide');
+
+            },2000);
+        }
+
+        window.onload = function(){
+            console.log('cargado')
+            listarProductos();
+            console.log('hola')
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="header">Registrar Venta</div>
@@ -58,7 +264,7 @@
                                 <div class="form-group">
                                     <select name="cboProduct" id="cboProduct" class="form-control" required>
                                         <option value="-1" disabled >Seleccionar...</option>
-                                        <option th:each="product:${listProducts}" th:value="${product.name+'-'+product.price+'-'+product.stock+ '-' + product.id}" th:utext="${product.name + ' --- S/ ' + product.price}"></option>
+
                                     </select>
                                 </div>
                             </div>
@@ -236,13 +442,18 @@
                     <td class="d-none">
                         <input id="elim-${id}" hidden value="false" name="eliminado[]" type="text">
                     </td>
+                    <td class="d-none">
+                        <input readonly value="${id}" name="product[]" class="form-control txtProduct" type="text">
+                    </td>
                     <td class="form-group">
-                        <input readonly value="${name}" name="product[]" class="form-control txtProduct" type="text">
+                        ${name}
                     </td>
                     <td class="form-group">
                         <input min="0" max="${stock}" value="1" name="quantity[]" onchange="updateSubtotal(event)" class="form-control numQuantity" type="number">
                     </td>
-                    <td class="text-center txtPrice">${price}</td>
+                    <td class="text-center txtPrice">
+                        <input readonly value="${price}" name="price[]" class="form-control txtPrecio" type="text">
+                    </td>
                     <td class="text-center txtSubtotal" id="sub-${id}">0</td>
                     <td class="text-center">
                         <a onclick="deleteProduct(event,${id})" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
@@ -269,7 +480,7 @@
         function updateSubtotal(e){
             let row =  e.target.parentElement.parentElement;
             const subtotal = row.querySelector(".txtSubtotal");
-            const price = parseFloat(row.querySelector(".txtPrice").innerText);
+            const price = parseFloat(row.querySelector(".txtPrice input").value);
             const quantity = e.target.value;
             subtotal.innerText = (quantity*price).toString();
             updateTotal();

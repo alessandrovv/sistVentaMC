@@ -17,6 +17,7 @@ public class Sale_DetailServiceImpl implements ISale_DetailService{
         Sale_Detail sale_detail = new Sale_Detail(
                 registrationDto.getSale(),
                 registrationDto.getProduct(),
+                registrationDto.getPrice(),
                 registrationDto.getQuantity()
         );
 
@@ -29,6 +30,7 @@ public class Sale_DetailServiceImpl implements ISale_DetailService{
                 id,
                 registrationDto.getSale(),
                 registrationDto.getProduct(),
+                registrationDto.getPrice(),
                 registrationDto.getQuantity(),
                 registrationDto.isEliminado()
         );
